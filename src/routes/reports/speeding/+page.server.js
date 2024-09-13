@@ -1,12 +1,63 @@
-async function getEvents(selected, traccar, searchParams, request) {
+async function fetchReportes(url, body, authorization) {
+    const init = {
+        body,
+        method: 'post',
+        headers: {
+            'content-type': 'application/json',
+            //'x-api-key': 'Up15nJltS365KirecShSz9OIKmMlXfBMat4gEspl'
+            'x-api-key': 'SOxJ05P3KOrkyqJopz6T2nsQbo8H1CH898rBXyyf'
+        }
+    }
+    if (authorization) {
+        init.headers['authorization'] = authorization
+    }
+    url = 'https://reportes.waypoint.cl/v1/base/' + url
+    console.log(url, init)
+    const response = await fetch(url, init);
+    if (response.ok) { return response.json() }
+    throw new Error(response.status + ' ' + await response.text())
+}
+
+async function getEvents(selected, traccar, searchParams) {
     const result = []
     for (const deviceId of selected) {
-        const url = `${traccar}/api/positions?deviceId=${deviceId}&from=${searchParams.get('start')}&to=${searchParams.get('end')}`;
-        console.log(url)
-        const response = await fetch(url,
-            {headers: {cookie: request.headers.get('cookie')}, redirect: 'follow'})
+        const authorization = `Bearer ${searchParams.get('at')}`
+        const body = {
+            listImei: selected.map(s => parseInt(s)),
+            desde: searchParams.get('start'),
+            hasta: searchParams.get('end'),
+            async: true,
+            formato: 'json',
+            ignicion: true,
+            interseccion: false,
+            maxHdop: 2.4,
+            offset: 1,
+            minNsat: 5,
+            minDetencion: '3600',
+            timezone: 1,
+            zona: true,
+            obd2: false,
+            zoneId: 'Europe/Lisbon'
+        }
+
+        let payload = await fetchReportes(
+            'historial-ruta',
+            JSON.stringify(body),
+            authorization)
+        let status = 'RUNNING'
+        let response
+        while (status === 'RUNNING') {
+            await new Promise(res => setTimeout(res, 1000))
+            response = await fetchReportes('report-status', JSON.stringify({...payload, count:true}))
+            status = response.status
+            console.log(response)
+        }
+        response = await fetch(response.url)
         if (response.ok) {
-            result.push(await getSpeedEvents(selected, await response.json()))
+            const {data} = await response.json()
+            result.push(await getSpeedEvents(selected,
+                data.map(p => ({longitude: p.lon, latitude: p.lat, speed: p.sog / 1.852, fixTime: p.epoch * 1000}))
+            ))
         } else {
             throw new Error('error status ' + response.status + ' ' + await response.text())
         }
@@ -26,11 +77,11 @@ function positionsFar(position1, position2) {
     return new Date(position2.fixTime).getTime() - new Date(position1.fixTime).getTime() > minMinutes * 60 * 1000
 }
 
-async function getSpeedEvents (deviceIds, routes, threshold=0, minimumMinutes = 0, country='CL') {
+async function getSpeedEvents (deviceIds, data, threshold=0, minimumMinutes = 0, country='CL') {
     const chunk = 100
     const results = []
     for (const d of deviceIds) {
-        const route = routes.filter(r => r.deviceId === parseInt(d))
+        const route = data
         let current
         for (let i = 0; i < route.length; i += chunk) {
             const result = await invokeValhalla(route, i, chunk, country, threshold, results)
@@ -41,6 +92,7 @@ async function getSpeedEvents (deviceIds, routes, threshold=0, minimumMinutes = 
                 shape
             } = result
             const shapePoints = decodePolyline(shape)
+            console.log('matched points', matched_points.length)
             matched_points.forEach((mp, mIndex) => {
                 const edge = edges[mp.edge_index]
                 const position = route[mIndex + i]
@@ -66,6 +118,7 @@ async function getSpeedEvents (deviceIds, routes, threshold=0, minimumMinutes = 
             })
         }
     }
+    console.log('returning ', results.length)
     return results
 }
 let  countError = 0, countSuccess = 0
@@ -101,9 +154,10 @@ async function invokeValhalla (route, i, chunk, country, threshold, results, ret
                 slice[0] && slice[0].deviceId, slice[0] && slice[0].address, slice[0] && slice[0].fixTime, country, 'chunk', chunk, 'success', countSuccess, 'error', countError)
         }
         countError++
+    } else {
+        countSuccess++
+        return response.json()
     }
-    countSuccess++
-    return response.json()
 }
 
 
