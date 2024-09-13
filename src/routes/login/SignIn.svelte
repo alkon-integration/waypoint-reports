@@ -1,7 +1,7 @@
 <script >
     import {Checkbox, A, Button, Card } from 'flowbite-svelte';
     import {writable, get} from "svelte/store";
-    import { setError, session } from '$lib/store';
+    import { setError, session, at } from '$lib/store';
     import {goto} from "$app/navigation";
     export let title = 'Sign in';
     export let rememberMe = true;
@@ -37,12 +37,17 @@
             const data = await response.text()
             if (response.ok) {
                 console.log(data)
-                const url = `/WaypointSessions/OpenSessionAsync?usuario=${_session.user_919e79e9
+                const user = _session.user_919e79e9
+                const pass = _session.pass
+                let url = `/WaypointSessions/OpenSessionAsync?usuario=${user
                     }&idusuario=${data.split(';')[1]
-                    }&pass=${_session.pass
+                    }&pass=${pass
                     }&dom=webapp.waypoint.cl`
                 console.log(url)
                 response = await fetch(url)
+                url = `https://api.waypoint.cl/auth/login?user=${user}&password=${pass}`
+                console.log(url)
+                at.set(await fetch(url).then(r => r.json()))
                 await goto('/')
             } else {
                 setError(await response.text());
