@@ -13,7 +13,7 @@
     let lostPassword = true;
     let createAccount = true;
     let lostPasswordLink = 'forgot-password';
-    let loginTitle = 'Login to your account';
+    let loginTitle = 'Entrar';
     let registerLink = 'sign-up';
     let createAccountTitle = 'Create account';
 
