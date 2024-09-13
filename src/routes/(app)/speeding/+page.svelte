@@ -6,7 +6,7 @@
     import {get} from "svelte/store";
     import {format} from "date-fns";
     let loadingReport = false
-    let start, end, selected, datePicker
+    let start, selected, datePicker
     export let data
     let reportLoaded = false
 </script>
