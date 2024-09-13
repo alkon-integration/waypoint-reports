@@ -37,7 +37,7 @@ async function getEvents(selected, traccar, searchParams) {
             timezone: 1,
             zona: true,
             obd2: false,
-            zoneId: 'Europe/Lisbon'
+            zoneId: 'America/Santiago'
         }
 
         let payload = await fetchReportes(
