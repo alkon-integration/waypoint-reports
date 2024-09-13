@@ -4,6 +4,7 @@
     import DatePicker from "$lib/components/DatePicker.svelte";
     import {setAlert, at} from "$lib/store.js";
     import {get} from "svelte/store";
+    import {format} from "date-fns";
     let loadingReport = false
     let start, end, selected, datePicker
     export let data
@@ -43,8 +44,8 @@
         loadingReport=false
     }} title="report" class="h-full w-full pb-4" src="{
         `/reports/speeding?at=${get(at).AccessToken
-        }&start=${start.toISOString().slice(0,10) + ' 00:00:00'
-        }&end=${start.toISOString().slice(0,10) + ' 23:59:59'
+        }&start=${format(start,'yyyy-MM-dd' + ' 00:00:00')
+        }&end=${format(start,'yyyy-MM-dd' + ' 23:59:59')
         }&selected=${selected}`
     }"/>
 {/if}
