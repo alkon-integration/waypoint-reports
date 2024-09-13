@@ -32,7 +32,7 @@
             {#if loadingReport}
                 <Spinner class="me-3" size="4" color="white"/>
             {/if}
-            {loadingReport?'Loading...':'Generate'}
+            {loadingReport?'Loading...':'Consultar'}
         </Button>
     </div>
 </Toolbar>

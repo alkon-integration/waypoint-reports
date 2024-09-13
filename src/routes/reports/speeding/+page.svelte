@@ -75,7 +75,7 @@
 {/if}
 
 <Heading tag="h1" class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl pb-4">
-    Relatório de Excessos de Velocidade
+    Informe de excesos de velocidad
 </Heading>
 
 <div bind:this={tbl}>
