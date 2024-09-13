@@ -66,11 +66,16 @@ async function getEvents(selected, traccar, searchParams) {
 }
 
 export async function load({request, platform}) {
-    const traccar = (platform && platform.env.TRACCAR_SERVER) || import.meta.env.VITE_TRACCAR_SERVER
-    const s = platform && platform.env.TRACCAR_SERVER_HTTPS ? 's' : ''
-    const {searchParams} = new URL(request.url)
-    const selected = searchParams.get('selected').split(',')
-    return {events: await getEvents(selected, `http${s}://${traccar}`, searchParams, request)}
+    try {
+        const traccar = (platform && platform.env.TRACCAR_SERVER) || import.meta.env.VITE_TRACCAR_SERVER
+        const s = platform && platform.env.TRACCAR_SERVER_HTTPS ? 's' : ''
+        const {searchParams} = new URL(request.url)
+        const selected = searchParams.get('selected').split(',')
+        return {events: await getEvents(selected, `http${s}://${traccar}`, searchParams, request)}
+    } catch (e) {
+        console.error('load', e.message, e)
+        throw e
+    }
 }
 const minMinutes = 2
 function positionsFar(position1, position2) {
@@ -150,7 +155,7 @@ async function invokeValhalla (route, i, chunk, country, threshold, results, ret
                 'success', countSuccess, 'error', countError)
             return invokeValhalla(route, i, chunk, country, threshold, results, retry)
         } else {
-            console.error(e.message, (e.response && e.response.data) || url, 'deviceId',
+            console.error('invoke valhalla error', e.message, url, 'deviceId',
                 slice[0] && slice[0].deviceId, slice[0] && slice[0].address, slice[0] && slice[0].fixTime, country, 'chunk', chunk, 'success', countSuccess, 'error', countError)
         }
         countError++
