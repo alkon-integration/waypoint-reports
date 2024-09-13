@@ -26,7 +26,7 @@
         const baseUrl = "https://maps.googleapis.com/maps/api/staticmap?";
         const size = "size=300x200";
         const path = coordinates.map(c =>`path=color:0xff0000ff|weight:6|${c.map(node => `${node[0]},${node[1]}`).join('|')}`).join('&');
-        const markers = points.map(p => `markers=size:tiny|color:red|${p.latitude},${p.longitude}`).join('&')
+        const markers = points.map(p => `markers=size:tiny|color:yellow|${p.latitude},${p.longitude}`).join('&')
         const apiKey = import.meta.env.VITE_GOOGLE_API_KEY
         return `${baseUrl}${size}&${path}&key=${apiKey}&${markers}`;
     }
