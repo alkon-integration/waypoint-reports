@@ -1,6 +1,6 @@
 <script >
     import {Checkbox, A, Button, Card } from 'flowbite-svelte';
-    import {writable} from "svelte/store";
+    import {writable, get} from "svelte/store";
     import { setError, session } from '$lib/store';
     import {goto} from "$app/navigation";
     export let title = 'Sign in';
@@ -21,16 +21,28 @@
         event.preventDefault();
         const formData = new FormData(event.target);
         const body = new URLSearchParams();
+        const _session = {}
+        console.log(get(session))
+
         for (const pair of formData.entries()) {
             body.append(pair[0], pair[1]);
+            _session[pair[0]] = pair[1]
         }
+        session.set(_session)
         try {
-            const response = await fetch('/api/session', {
+            let response = await fetch('/clientes/login_async.php', {
                 method: 'POST',
                 body
             });
+            const data = await response.text()
             if (response.ok) {
-                session.set(await response.json());
+                console.log(data)
+                const url = `/WaypointSessions/OpenSessionAsync?usuario=${_session.user_919e79e9
+                    }&idusuario=${data.split(';')[1]
+                    }&pass=${_session.pass
+                    }&dom=webapp.waypoint.cl`
+                console.log(url)
+                response = await fetch(url)
                 await goto('/')
             } else {
                 setError(await response.text());

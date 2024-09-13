@@ -8,10 +8,17 @@ export async function forwardRequest({ request, platform }) {
         const url = new URL(request.url)
         url.host = host
         url.port = 80
-        url.protocol = 'http:'
+        url.protocol = 'https:'
         const response = await fetch(new Request(url, request))
         const body = await response.text()
-        if (response.ok) { return new Response(body) }
+        if (response.ok) {
+            const setCookie = response.headers.getSetCookie()
+            return new Response(body,
+            {
+                method: request.method,
+                headers: {'set-cookie': setCookie.map(c => c.replace('waypoint.cl', new URL(request.url).hostname))}
+            })
+        }
         return new Response(body, {status: response.status})
     } catch (e) {
         console.log(e)

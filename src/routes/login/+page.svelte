@@ -42,12 +42,10 @@
         on:submit={onSubmit}
 >
     <div>
-        <Label for="email" class="mb-2 dark:text-white">Your email</Label>
+        <Label for="email" class="mb-2 dark:text-white">Usuario</Label>
         <Input
                 type="text"
-                name="email"
-                id="email"
-                placeholder="name@company.com"
+                name="user_919e79e9"
                 required
                 class="border outline-none dark:border-gray-600 dark:bg-gray-700"
         />
@@ -56,11 +54,13 @@
         <Label for="password" class="mb-2 dark:text-white">Your password</Label>
         <Input
                 type="password"
-                name="password"
-                id="password"
+                name="pass"
                 placeholder="••••••••"
                 required
                 class="border outline-none dark:border-gray-600 dark:bg-gray-700"
         />
+        <Input type="hidden" name="login_url" value="/clientes/"></Input>
+        <Input type="hidden" name="return_id" value="true"></Input>
+        <Input type="hidden" name="campo_usuario" value="919e79e9"></Input>
     </div>
 </SignIn>
