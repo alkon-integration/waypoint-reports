@@ -10,7 +10,7 @@
 </script>
 
 <Heading tag="h1" class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
-    Speeding Report
+    Excesos de Velocidad
 </Heading>
 <Toolbar class="w-full py-4 text-gray-500 dark:text-gray-400" embedded>
     <div class="flex gap-4">
