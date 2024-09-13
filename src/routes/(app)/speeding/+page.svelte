@@ -23,7 +23,7 @@
             [start, end] = datePicker.getDates()
             loadingReport = false
             reportLoaded = false
-            if (selected && selected.length && start && end) {
+            if (selected && selected && start && end) {
                 setTimeout(() => loadingReport = true, 100)
             } else {
                 setAlert('Please select devices and dates')
