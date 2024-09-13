@@ -52,7 +52,7 @@ async function getEvents(selected, traccar, searchParams) {
             status = response.status
             console.log(response)
         }
-        response = await fetch(response.url)
+        response = await fetch(response && response.url)
         if (response.ok) {
             const {data} = await response.json()
             result.push(await getSpeedEvents(selected,
