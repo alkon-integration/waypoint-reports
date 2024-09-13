@@ -51,11 +51,11 @@
         />
     </div>
     <div>
-        <Label for="password" class="mb-2 dark:text-white">Your password</Label>
+        <Label for="password" class="mb-2 dark:text-white">Contraseña</Label>
         <Input
                 type="password"
                 name="pass"
-                placeholder="••••••••"
+                placeholder=""
                 required
                 class="border outline-none dark:border-gray-600 dark:bg-gray-700"
         />

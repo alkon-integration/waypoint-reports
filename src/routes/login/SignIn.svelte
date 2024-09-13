@@ -8,7 +8,7 @@
     export let lostPassword = true;
     export let createAccount = true;
     export let lostPasswordLink = '';
-    export let loginTitle = 'Login to your account';
+    export let loginTitle = 'Login';
     export let registerLink = '';
     export let createAccountTitle = 'Create account';
     export let mainDivClass =
