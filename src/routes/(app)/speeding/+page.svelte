@@ -20,19 +20,19 @@
     </div>
     <div class="p-4">
         <Button class="whitespace-nowrap" on:click={async () => {
-            [start, end] = datePicker.getDates()
+            start = datePicker.getDate()
             loadingReport = false
             reportLoaded = false
-            if (selected && selected && start && end) {
+            if (selected && selected && start) {
                 setTimeout(() => loadingReport = true, 100)
             } else {
-                setAlert('Please select devices and dates')
+                setAlert('Por favor seleccionar vehículo y fecha')
             }
         }}>
             {#if loadingReport}
                 <Spinner class="me-3" size="4" color="white"/>
             {/if}
-            {loadingReport?'Loading...':'Consultar'}
+            {loadingReport?'Cargando...':'Consultar'}
         </Button>
     </div>
 </Toolbar>
@@ -44,7 +44,7 @@
     }} title="report" class="h-full w-full pb-4" src="{
         `/reports/speeding?at=${get(at).AccessToken
         }&start=${start.toISOString().slice(0,10) + ' 00:00:00'
-        }&end=${end.toISOString().slice(0,10) + ' 23:59:59'
+        }&end=${start.toISOString().slice(0,10) + ' 23:59:59'
         }&selected=${selected}`
     }"/>
 {/if}
