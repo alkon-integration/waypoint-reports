@@ -39,7 +39,7 @@
 
 
     let items = [
-        { name: 'Speeding', icon: GridPlusOutline, href: '/speeding' },
+        { name: 'Velocidad', icon: GridPlusOutline, href: '/speeding' },
     ];
 
     let lg,sm;
