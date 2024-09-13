@@ -3,5 +3,5 @@
 </script>
 
 <Alert>
-    Welcome!
+    Bienvenido!
 </Alert>
