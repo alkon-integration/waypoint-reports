@@ -5,8 +5,9 @@ export const ssr = false
 export async function load({fetch}) {
     try {
         let response = await fetch('/Req/GetCliente')
-        if (response.status !== 200) {
-            console.log(response)
+        const [result] = await response.json()
+        if (result.error) {
+            console.log(result.error)
             await goto('/login')
             return
         }
