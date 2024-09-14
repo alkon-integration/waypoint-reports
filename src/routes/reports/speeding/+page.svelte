@@ -115,6 +115,7 @@
                         <VisXYContainer height="100" data={event.positions}>
                             <VisArea color="red" opacity={0.2} x={d => new Date(d.fixTime)} y={d => d.speed*1.852} />
                             <VisLine color="red" x={d => new Date(d.fixTime)} y={d => d.speed*1.852} />
+                            <VisLine color="orange" x={d => new Date(d.fixTime)} y={() => event.edges[0].speed_limit} />
                             <VisAxis type="x" tickFormat="{(x) => new Date(x).toLocaleTimeString()}" />
                             <VisAxis type="y" />
                             <VisCrosshair {template}></VisCrosshair>
